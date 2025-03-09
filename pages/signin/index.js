@@ -26,7 +26,7 @@ const Login = () => {
     try {
       const res = await apiInstance.post('/auth/login', data);
       localStorage.setItem('user', JSON.stringify(res.data.userInfo));
-      toast(res.data?.message, {type: 'success'});
+      toast(res.data?.message, {type: 'success', autoClose: 2000});
     } catch (error) {
       toast(error?.response?.data?.message, {type: 'error'});
     }
