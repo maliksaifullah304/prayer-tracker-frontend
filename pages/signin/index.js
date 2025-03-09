@@ -11,6 +11,7 @@ import PrayerImg from "../../components/offerPrayerImg";
 import IslamicIcon from "../../components/islamicIcon";
 import OfferPrayerImg from "../../components/offerPrayerImg";
 import Link from "next/link";
+import apiInstance from "@/lib/http";
 
 const Login = () => {
   const router = useRouter();
@@ -21,7 +22,16 @@ const Login = () => {
   } = useForm({
     resolver: yupResolver(loginSchema),
   });
-  const onSubmit = async (data) => {};
+  const onSubmit = async (data) => {
+    try {
+      const res = await apiInstance.post("/auth/login", data);
+      console.log(res);
+      localStorage.setItem("user", JSON.stringify(res.data.userInfo));
+      toast(res.data?.message, { type: "success" });
+    } catch (error) {
+      toast(error?.response?.data?.message, { type: "error" });
+    }
+  };
   return (
     <Stack direction={"row"}>
       <Box sx={{ width: { xs: "100%", md: "50%" } }}>

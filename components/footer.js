@@ -1,7 +1,7 @@
 export default function Footer({ firstname, lastname }) {
   return (
     <div>
-      {firstname}open layout page
+      {firstname}Designed by Saifullah (BC210401217)
       <h1>{lastname}</h1>
     </div>
   );
