@@ -1,20 +1,16 @@
-import {Box, Button, Grid, Stack, Typography} from '@mui/material';
+import {Box, Button, Stack} from '@mui/material';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {useRouter} from 'next/navigation';
 import {loginSchema} from '../../validations/authSchema';
-import Image from 'next/image';
 import PasswordInput from '@/components/input/passwordInput';
 import EmailInput from '@/components/input/emailInput';
 import {toast} from 'react-toastify';
-import PrayerImg from '../../components/offerPrayerImg';
 import IslamicIcon from '../../components/islamicIcon';
 import OfferPrayerImg from '../../components/offerPrayerImg';
 import Link from 'next/link';
 import apiInstance from '@/lib/http';
 
 const Login = () => {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -27,6 +23,7 @@ const Login = () => {
       const res = await apiInstance.post('/auth/login', data);
       localStorage.setItem('user', JSON.stringify(res.data.userInfo));
       toast(res.data?.message, {type: 'success', autoClose: 2000});
+      window.location.reload();
     } catch (error) {
       toast(error?.response?.data?.message, {type: 'error'});
     }
@@ -55,7 +52,7 @@ const Login = () => {
               {...register('password')}
             />
 
-            <Link href="./signup">Does'nt have an account</Link>
+            <Link href="/register">Does'nt have an account</Link>
 
             <Stack
               alignItems={'center'}

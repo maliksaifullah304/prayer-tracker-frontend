@@ -1,20 +1,19 @@
-import "@/styles/globals.css";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { createTheme, ThemeProvider } from "@mui/material";
-import SideBar from "../components/sidebar";
-import Footer from "@/components/footer";
+import '@/styles/globals.css';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {createTheme, ThemeProvider} from '@mui/material';
+import SideBar from '../components/sidebar';
+import AuthGuard from '@/components/authGuard';
 
-export default function App({
-  Component,
-  pageProps: { session, ...pageProps },
-}) {
+export default function App({Component, pageProps: {session, ...pageProps}}) {
   const theme = createTheme();
   return (
     <>
-      <SideBar>
-        <Component {...pageProps} />
-      </SideBar>
+      <AuthGuard>
+        <SideBar>
+          <Component {...pageProps} />
+        </SideBar>
+      </AuthGuard>
       <ThemeProvider theme={theme} />
       <ToastContainer
         position="top-right"
@@ -28,8 +27,6 @@ export default function App({
         pauseOnHover
         theme="light"
       />
-
-      <Footer />
     </>
   );
 }
