@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Table,
   TableBody,
@@ -8,8 +8,10 @@ import {
   TableRow,
   Paper,
   Typography,
-} from "@mui/material";
-import { generateMockPrayers } from "@/lib/prayer";
+  Box,
+  Button,
+} from '@mui/material';
+import {generateMockPrayers} from '@/lib/prayer';
 
 const PrayerTable = () => {
   const mockPrayers = generateMockPrayers();
@@ -34,7 +36,26 @@ const PrayerTable = () => {
                 <TableRow key={idx}>
                   <TableCell>{prayer.date.toLocaleDateString()}</TableCell>
                   <TableCell>{status.prayerName}</TableCell>
-                  <TableCell>{status.status}</TableCell>
+                  <TableCell>
+                    <Box display="flex" gap={1}>
+                      <Button
+                        variant={
+                          status.status === 'offered' ? 'contained' : 'outlined'
+                        }
+                        color="success"
+                      >
+                        Offered
+                      </Button>
+                      <Button
+                        variant={
+                          status.status === 'missed' ? 'contained' : 'outlined'
+                        }
+                        color="error"
+                      >
+                        Missed
+                      </Button>
+                    </Box>
+                  </TableCell>
                 </TableRow>
               ))}
             </React.Fragment>
