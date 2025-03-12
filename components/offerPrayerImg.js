@@ -9,7 +9,7 @@ export default function OfferPrayerImg() {
       width={"50%"}
       pb={9}
     >
-      <Image alt="" width={500} height={700} src={"/Prayer1.jpg"} />
+      <Image alt="" width={600} height={700} src={"/Prayer3.jpg"} />
     </Stack>
   );
 }

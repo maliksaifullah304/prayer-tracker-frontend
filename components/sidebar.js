@@ -9,22 +9,27 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {usePathname} from 'next/navigation';
-import {Button} from '@mui/material';
+import {Button, Link} from '@mui/material';
 import apiInstance from '@/lib/http';
 import {toast} from 'react-toastify';
 
 const drawerWidth = 240;
 
 function SideBar({children}) {
+  const [user, setUser] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    setUser(storedUser);
+  }, []);
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -41,18 +46,26 @@ function SideBar({children}) {
     }
   };
 
+  // Define allowed routes based on user role
+  const allowedRoutes =
+    user?.role === 'admin'
+      ? [{name: 'Dashboard', path: '/dashboard'}]
+      : user?.role === 'user'
+      ? [{name: 'Prayers', path: '/prayers'}]
+      : [];
+
   const drawer = (
     <div>
       <Toolbar />
       <Divider />
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
+        {allowedRoutes.map((route, index) => (
+          <ListItem key={index} disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <Link href={route.path}>{route.name}</Link>
             </ListItemButton>
           </ListItem>
         ))}
@@ -64,13 +77,17 @@ function SideBar({children}) {
     try {
       const {data} = await apiInstance.post('auth/logout');
       toast(data?.message, {type: 'success'});
-      localStorage.clear('user');
+      localStorage.removeItem('user');
       window.location.reload();
-    } catch (error) {}
+    } catch (error) {
+      toast('Logout failed', {type: 'error'});
+    }
   };
+
   const pathname = usePathname();
   const isDashBoardRoute = pathname === '/dashboard';
-  return isDashBoardRoute ? (
+  const isPrayersRoute = pathname === '/prayers';
+  return isDashBoardRoute || isPrayersRoute ? (
     <Box sx={{display: 'flex'}}>
       <CssBaseline />
       <AppBar
@@ -91,10 +108,11 @@ function SideBar({children}) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Responsive drawer
+            Prayer Tracker
           </Typography>
         </Toolbar>
       </AppBar>
+
       <Box
         component="nav"
         sx={{width: {sm: drawerWidth}, flexShrink: {sm: 0}}}
@@ -114,7 +132,7 @@ function SideBar({children}) {
           }}
           slotProps={{
             root: {
-              keepMounted: true, // Better open performance on mobile.
+              keepMounted: true,
             },
           }}
         >
@@ -134,7 +152,7 @@ function SideBar({children}) {
           {drawer}
 
           <Button onClick={logout} color="primary" variant="contained">
-            logout
+            Logout
           </Button>
         </Drawer>
       </Box>
@@ -148,7 +166,6 @@ function SideBar({children}) {
         }}
       >
         <Toolbar />
-
         {children}
       </Box>
     </Box>
