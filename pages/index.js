@@ -1,27 +1,13 @@
-import {useState} from 'react';
 import Image from 'next/image';
 import {Inter} from 'next/font/google';
-import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Container,
-  Grid,
-  Paper,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import {Box, Card, Container, Grid, Paper, Typography} from '@mui/material';
 import Footer from '../components/footer';
+import NamazImportanceCard from '@/components/namazImportanceCard';
+import {namazImportanceData} from '@/constants/namaz';
 
 const inter = Inter({subsets: ['latin']});
 
 export default function Home() {
-  const [data, setData] = useState(0);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
   return (
     <Box className={inter.className}>
       {/* Hero Section */}
@@ -82,68 +68,14 @@ export default function Home() {
         </Typography>
 
         <Grid container spacing={3} sx={{mb: 6}}>
-          <Grid item xs={12} md={4}>
-            <Card sx={{height: '100%'}}>
-              <CardMedia
-                component="img"
-                height="200"
-                image="/dua.jpg"
-                alt="Spiritual connection"
-              />
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Spiritual Connection
-                </Typography>
-                <Typography variant="body2">
-                  Namaz establishes a direct connection with Allah, allowing
-                  Muslims to seek guidance, express gratitude, and ask for
-                  forgiveness.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <Card sx={{height: '100%'}}>
-              <CardMedia
-                component="img"
-                height="200"
-                image="/muslimAblution.webp"
-                alt="Discipline and routine"
-              />
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Discipline & Routine
-                </Typography>
-                <Typography variant="body2">
-                  The five daily prayers help Muslims maintain discipline and
-                  structure in their lives, reminding them of their purpose
-                  throughout the day.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <Card sx={{height: '100%'}}>
-              <CardMedia
-                component="img"
-                height="200"
-                image="/greeting.jpg"
-                alt="Community building"
-              />
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Community Building
-                </Typography>
-                <Typography variant="body2">
-                  Congregational prayers foster brotherhood and unity among
-                  Muslims, strengthening the community bonds and social
-                  cohesion.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+          {namazImportanceData.map(({description, imgSrc, title}, index) => (
+            <NamazImportanceCard
+              key={index}
+              description={description}
+              imgSrc={imgSrc}
+              title={title}
+            />
+          ))}
         </Grid>
 
         {/* Hadith Section */}
