@@ -4,6 +4,7 @@ import {Box, Card, Container, Grid, Paper, Typography} from '@mui/material';
 import Footer from '../components/footer';
 import NamazImportanceCard from '@/components/namazImportanceCard';
 import {namazImportanceData} from '@/constants/namaz';
+import Button from '@mui/material/Link';
 
 const inter = Inter({subsets: ['latin']});
 
@@ -26,6 +27,33 @@ export default function Home() {
           <Typography variant="h6">
             "Prayer is the pillar of religion" - Prophet Muhammad (PBUH)
           </Typography>
+
+          <Box sx={{mt: 4, textAlign: 'center'}}>
+            <Button
+              variant="contained"
+              color="primary" // Changed to primary (or keep secondary if preferred)
+              size="large"
+              href="/register"
+              sx={{
+                px: 5, // Increased horizontal padding
+                py: 2, // Increased vertical padding
+                fontSize: '1.2rem', // Slightly larger font
+                fontWeight: 'bold',
+                borderRadius: '12px', // More rounded corners
+                boxShadow: '0 4px 12px rgba(0,0,0,0.2)', // Softer shadow
+                textTransform: 'none', // Prevents uppercase transformation
+                '&:hover': {
+                  transform: 'translateY(-3px)', // More pronounced lift
+                  boxShadow: '0 8px 16px rgba(0,0,0,0.3)', // Stronger shadow on hover
+                  backgroundColor: 'primary.dark', // Darker shade on hover (adjust if using secondary)
+                },
+                color: 'white',
+                transition: 'all 0.3s ease-in-out', // Smoother transition
+              }}
+            >
+              Get Started
+            </Button>
+          </Box>
         </Container>
       </Box>
 
