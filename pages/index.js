@@ -21,11 +21,14 @@ export default function Home() {
         }}
       >
         <Container maxWidth="lg">
-          <Typography variant="h2" component="h1" gutterBottom>
-            The Importance of Namaz (Prayer)
+          <Typography variant="h3" component="h1" gutterBottom>
+            The Prayer Tracker
           </Typography>
           <Typography variant="h6">
-            "Prayer is the pillar of religion" - Prophet Muhammad (PBUH)
+            The Prayer Tracker App is a web-based platform designed to help
+            users consistently track and manage their daily prayers. With
+            features for logging prayer times, viewing prayer history, and
+            monitoring progress, the app encourages spiritual discipline.
           </Typography>
 
           <Box sx={{mt: 4, textAlign: 'center'}}>
@@ -63,7 +66,7 @@ export default function Home() {
         <Grid container spacing={4} alignItems="center" sx={{mb: 6}}>
           <Grid item xs={12} md={6}>
             <Typography variant="h4" component="h2" gutterBottom>
-              What is Namaz?
+              What is Prayer (Namaz)?
             </Typography>
             <Typography variant="body1" paragraph>
               Namaz, also known as Salah, is the obligatory Muslim prayer
