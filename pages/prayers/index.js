@@ -32,7 +32,6 @@ const PrayerTable = () => {
       const {data} = await apiInstance.get('prayer');
       setPrayerData(data.prayers.prayers);
     } catch (error) {
-      toast.error('Failed to fetch prayer data!');
     } finally {
       setLoading(false);
     }

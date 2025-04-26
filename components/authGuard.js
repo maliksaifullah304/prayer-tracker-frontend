@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
-const allowedRoutes = ['/dashboard', '/prayers'];
+const allowedRoutes = ['/dashboard', '/prayers', '/guidance'];
 
 // Helper function to normalize paths
 const normalizePath = (path) => {

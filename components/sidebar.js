@@ -49,9 +49,15 @@ function SideBar({children}) {
   // Define allowed routes based on user role
   const allowedRoutes =
     user?.role === 'admin'
-      ? [{name: 'Dashboard', path: '/dashboard'}]
+      ? [
+          {name: 'Dashboard', path: '/dashboard'},
+          {name: 'Guidance', path: '/guidance'},
+        ]
       : user?.role === 'user'
-      ? [{name: 'Prayers', path: '/prayers'}]
+      ? [
+          {name: 'Prayers', path: '/prayers'},
+          {name: 'Guidance', path: '/guidance'},
+        ]
       : [];
 
   const drawer = (
@@ -85,8 +91,9 @@ function SideBar({children}) {
   };
 
   const pathname = usePathname();
-  const isDashBoardRoute = pathname === '/dashboard';
-  const isPrayersRoute = pathname === '/prayers';
+  const isDashBoardRoute =
+    pathname === '/dashboard' || pathname === '/guidance';
+  const isPrayersRoute = pathname === '/prayers' || pathname === '/guidance';
   return isDashBoardRoute || isPrayersRoute ? (
     <Box sx={{display: 'flex'}}>
       <CssBaseline />
