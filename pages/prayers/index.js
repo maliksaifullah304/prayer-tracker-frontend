@@ -11,11 +11,12 @@ import {
   Box,
   Button,
   CircularProgress,
-  Modal,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
+  Switch,
+  FormControlLabel,
 } from '@mui/material';
 import apiInstance from '@/lib/http';
 import {toast} from 'react-toastify';
@@ -25,6 +26,9 @@ const PrayerTable = () => {
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [currentPrayer, setCurrentPrayer] = useState(null);
+  const [showQazaOnly, setShowQazaOnly] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
+  const [lastDayReport, setLastDayReport] = useState(null);
 
   const getPrayers = async () => {
     setLoading(true);
@@ -69,6 +73,47 @@ const PrayerTable = () => {
     getPrayers();
   }, []);
 
+  const getYesterday = () => {
+    const date = new Date();
+    date.setDate(date.getDate() - 1);
+    date.setHours(0, 0, 0, 0);
+    return date;
+  };
+
+  const generateLastDayReport = () => {
+    if (!prayerData) return;
+
+    const yesterday = getYesterday();
+
+    const yesterdayPrayers = prayerData.prayers.find((prayer) => {
+      const prayerDate = new Date(prayer.date);
+      return (
+        prayerDate.getDate() === yesterday.getDate() &&
+        prayerDate.getMonth() === yesterday.getMonth() &&
+        prayerDate.getFullYear() === yesterday.getFullYear()
+      );
+    });
+
+    if (yesterdayPrayers) {
+      setLastDayReport({
+        date: yesterday.toLocaleDateString(),
+        prayers: yesterdayPrayers.prayerStatus,
+      });
+    } else {
+      setLastDayReport({
+        date: yesterday.toLocaleDateString(),
+        prayers: [],
+      });
+    }
+
+    setReportOpen(true);
+  };
+
+  const handleCloseReport = () => {
+    setReportOpen(false);
+    setLastDayReport(null);
+  };
+
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" mt={4}>
@@ -82,6 +127,28 @@ const PrayerTable = () => {
       <Typography variant="h4" gutterBottom>
         Prayer Status
       </Typography>
+
+      {/* Filters and Report Button */}
+      <Box display="flex" alignItems="center" mb={2} gap={2}>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={showQazaOnly}
+              onChange={(e) => setShowQazaOnly(e.target.checked)}
+              color="primary"
+            />
+          }
+          label="Show Qaza (Missed) Only"
+        />
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={generateLastDayReport}
+        >
+          View Last Day Report
+        </Button>
+      </Box>
+
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -96,33 +163,37 @@ const PrayerTable = () => {
             {prayerData ? (
               prayerData.prayers.map((prayer, index) => (
                 <React.Fragment key={index}>
-                  {prayer.prayerStatus.map((status, idx) => (
-                    <TableRow key={`${index}-${idx}`}>
-                      <TableCell>
-                        {new Date(prayer.date).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>{status.prayerName}</TableCell>
-                      <TableCell>
-                        <Box
-                          sx={{
-                            color:
-                              status.status === 'OFFERED' ? 'green' : 'red',
-                            fontWeight: 'bold',
-                          }}
-                        >
-                          {status.status}
-                        </Box>
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="outlined"
-                          onClick={() => handleOpenModal(prayer.date, status)}
-                        >
-                          Update Status
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {prayer.prayerStatus
+                    .filter((status) =>
+                      showQazaOnly ? status.status === 'Missed' : true
+                    )
+                    .map((status, idx) => (
+                      <TableRow key={`${index}-${idx}`}>
+                        <TableCell>
+                          {new Date(prayer.date).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell>{status.prayerName}</TableCell>
+                        <TableCell>
+                          <Box
+                            sx={{
+                              color:
+                                status.status === 'OFFERED' ? 'green' : 'red',
+                              fontWeight: 'bold',
+                            }}
+                          >
+                            {status.status}
+                          </Box>
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="outlined"
+                            onClick={() => handleOpenModal(prayer.date, status)}
+                          >
+                            Update Status
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </React.Fragment>
               ))
             ) : (
@@ -136,6 +207,48 @@ const PrayerTable = () => {
         </Table>
       </TableContainer>
 
+      {/* Last Day Report Dialog */}
+      <Dialog open={reportOpen} onClose={handleCloseReport}>
+        <DialogTitle>Last Day Report</DialogTitle>
+        <DialogContent>
+          {lastDayReport ? (
+            <Box sx={{p: 2}}>
+              <Typography variant="h6" gutterBottom>
+                Date: {lastDayReport.date}
+              </Typography>
+              {lastDayReport.prayers.length > 0 ? (
+                lastDayReport.prayers.map((prayer, index) => (
+                  <Box
+                    key={index}
+                    display="flex"
+                    justifyContent="space-between"
+                    mb={1}
+                  >
+                    <Typography>{prayer.prayerName}</Typography>
+                    <Typography
+                      sx={{
+                        color: prayer.status === 'OFFERED' ? 'green' : 'red',
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      {prayer.status}
+                    </Typography>
+                  </Box>
+                ))
+              ) : (
+                <Typography>No prayers found for the last day.</Typography>
+              )}
+            </Box>
+          ) : (
+            <Typography>No prayers found for the last day.</Typography>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseReport}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Update Status Dialog */}
       <Dialog open={openModal} onClose={handleCloseModal}>
         <DialogTitle>Update Prayer Status</DialogTitle>
         <DialogContent>
@@ -169,7 +282,6 @@ const PrayerTable = () => {
               Mark as Offered
             </Button>
           )}
-
           <Button onClick={handleCloseModal}>Cancel</Button>
         </DialogActions>
       </Dialog>
