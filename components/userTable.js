@@ -50,13 +50,19 @@ export default function UserTable() {
             <TableCell align="center" sx={{width: '20%'}}>
               Name
             </TableCell>
-            <TableCell align="right" sx={{width: '20%'}}>
+            <TableCell align="center" sx={{width: '20%'}}>
               Email
             </TableCell>
             <TableCell align="center" sx={{width: '40%'}}>
               Address
             </TableCell>
-            <TableCell align="right" sx={{width: '20%'}}>
+            <TableCell align="center" sx={{width: '40%'}}>
+              Total Prayers
+            </TableCell>
+            <TableCell align="center" sx={{width: '40%'}}>
+              Missed Prayers
+            </TableCell>
+            <TableCell align="center" sx={{width: '20%'}}>
               Status
             </TableCell>
           </TableRow>
@@ -72,6 +78,8 @@ export default function UserTable() {
               </TableCell>
               <TableCell align="right">{user.email}</TableCell>
               <TableCell align="center">{user.address}</TableCell>
+              <TableCell align="center">{user.totalOfferPrayers}</TableCell>
+              <TableCell align="center">{user.totalMissedPrayers}</TableCell>
               <TableCell align="right">
                 <Button
                   variant="contained"
