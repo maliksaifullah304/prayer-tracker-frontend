@@ -83,7 +83,12 @@ export default function UserTable() {
               <TableCell align="right">
                 <Button
                   variant="contained"
-                  color={user.isActive ? 'secondary' : 'primary'}
+                  sx={{
+                    backgroundColor: user.isActive ? '#f44336' : '#4caf50',
+                    '&:hover': {
+                      backgroundColor: user.isActive ? '#d32f2f' : '#388e3c',
+                    },
+                  }}
                   onClick={() =>
                     user.isActive ? deActivateUser(user) : activateUser(user)
                   }

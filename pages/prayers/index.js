@@ -114,6 +114,17 @@ const PrayerTable = () => {
     setLastDayReport(null);
   };
 
+  // Function to sort prayers by date (newest first)
+  const sortPrayersByDate = (prayers) => {
+    if (!prayers) return [];
+
+    return [...prayers].sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return dateB - dateA; // Descending order
+    });
+  };
+
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" mt={4}>
@@ -161,7 +172,7 @@ const PrayerTable = () => {
           </TableHead>
           <TableBody>
             {prayerData ? (
-              prayerData.prayers.map((prayer, index) => (
+              sortPrayersByDate(prayerData.prayers).map((prayer, index) => (
                 <React.Fragment key={index}>
                   {prayer.prayerStatus
                     .filter((status) =>

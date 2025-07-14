@@ -158,7 +158,16 @@ function SideBar({children}) {
         >
           {drawer}
 
-          <Button onClick={logout} color="primary" variant="contained">
+          <Button
+            onClick={logout}
+            variant="contained"
+            sx={{
+              backgroundColor: '#d32f2f', // Dark red
+              '&:hover': {
+                backgroundColor: '#b71c1c', // Darker red on hover
+              },
+            }}
+          >
             Logout
           </Button>
         </Drawer>
