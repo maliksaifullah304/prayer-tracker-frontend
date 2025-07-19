@@ -89,6 +89,14 @@ const SignUp = () => {
               >
                 SignUp
               </Button>
+              <Button
+                type="Reset"
+                style={{padding: '15px 60px'}}
+                color="primary"
+                variant="contained"
+              >
+                Reset
+              </Button>
             </Stack>
           </Stack>
         </form>

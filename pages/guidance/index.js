@@ -140,7 +140,7 @@ const GuidancePage = () => {
   return (
     <Stack spacing={4} mt={5} px={2}>
       <Typography variant="h4" textAlign="center">
-        Manage Prayer Guidance
+        Prayer Guidance
       </Typography>
 
       {isAdmin && (
